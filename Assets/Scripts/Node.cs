@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,9 +13,14 @@ public class Node : MonoBehaviour
     public object[] data;
     public string[][] vals;
 
-    public int id;
+    public List<Link> outgoing_link_list;
+    public List<Link> incoming_link_list;
 
+    public int node_seq_no, external_node_id, zone_id;
     public float xcoord, ycoord;
 
-
+    private void Start() 
+    {
+        
+    }
 }

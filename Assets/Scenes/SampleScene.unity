@@ -151,8 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f2c223acabe164699052555422f0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NodeFileName: node 1
-  LinkFileName: link 1
+  NodeFileName: node
+  LinkFileName: link
   nodePrefab: {fileID: 8000699679096367922, guid: 8af377ce321cc974ebe8c5da1d6ac6d7,
     type: 3}
   linkPrefab: {fileID: 8760269277298778669, guid: 3d759f1c755221c448d21ca205426cfc,
