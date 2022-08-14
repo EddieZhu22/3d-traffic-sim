@@ -158,6 +158,7 @@ MonoBehaviour:
   linkPrefab: {fileID: 8760269277298778669, guid: 3d759f1c755221c448d21ca205426cfc,
     type: 3}
   multiplier: 10000
+  manager: {fileID: 972547431}
 --- !u!4 &302441426
 Transform:
   m_ObjectHideFlags: 0
@@ -376,6 +377,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d77a96009a63b44a211a29c4d1c41a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LENGTH_OF_SIMULATION_TIME_HORIZON_IN_INTERVAL: 900
+  NUMBER_OF_SIMU_INTERVALS_PER_MIN: 10
+  g_simulation_start_time_in_min: 9999
+  g_simulation_end_time_in_min: 0
+  g_start_simu_interval_no: 0
+  g_end_simu_interval_no: 0
+  g_number_of_nodes: 0
+  g_number_of_links: 0
+  g_number_of_agents: 0
+  g_cumulative_arrival_count: 0
+  g_cumulative_departure_count: 0
+  links: []
+  nodes: []
 --- !u!4 &972547432
 Transform:
   m_ObjectHideFlags: 0
