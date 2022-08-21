@@ -122,57 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &302441424
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 302441426}
-  - component: {fileID: 302441425}
-  m_Layer: 0
-  m_Name: Instantiator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &302441425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302441424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f2c223acabe164699052555422f0ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NodeFileName: node
-  LinkFileName: link
-  nodePrefab: {fileID: 8000699679096367922, guid: 8af377ce321cc974ebe8c5da1d6ac6d7,
-    type: 3}
-  linkPrefab: {fileID: 8760269277298778669, guid: 3d759f1c755221c448d21ca205426cfc,
-    type: 3}
-  multiplier: 10000
-  manager: {fileID: 972547431}
---- !u!4 &302441426
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302441424}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.7656193, y: 8.02001, z: 4.977982}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +264,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 200
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -374,22 +323,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 972547430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41d77a96009a63b44a211a29c4d1c41a, type: 3}
+  m_Script: {fileID: 11500000, guid: b76b1afd99f9c7c4291385ffc824d437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LENGTH_OF_SIMULATION_TIME_HORIZON_IN_INTERVAL: 900
-  NUMBER_OF_SIMU_INTERVALS_PER_MIN: 10
-  g_simulation_start_time_in_min: 9999
-  g_simulation_end_time_in_min: 0
-  g_start_simu_interval_no: 0
-  g_end_simu_interval_no: 0
-  g_number_of_nodes: 0
-  g_number_of_links: 0
-  g_number_of_agents: 0
-  g_cumulative_arrival_count: 0
-  g_cumulative_departure_count: 0
-  links: []
-  nodes: []
+  Node_File_Name: node
+  Link_File_Name: link
+  Agent_File_Name: agent
+  network:
+    LENGTH_OF_SIMULATION_TIME_HORIZON_IN_INTERVAL: 900
+    NUMBER_OF_SIMU_INTERVALS_PER_MIN: 10
+    g_simulation_start_time_in_min: 9999
+    g_simulation_end_time_in_min: 0
+    g_start_simu_interval_no: 0
+    g_end_simu_interval_no: 0
+    g_number_of_nodes: 0
+    g_number_of_links: 0
+    g_number_of_agents: 0
+    g_cumulative_arrival_count: 0
+    g_cumulative_departure_count: 0
+    node_predecessor: 
+    node_label_cost: []
+    link_predecessor: 
+    node_OutgoingLinkSize: 
+    link_volume_array: 
+    from_node_seq_no: 0
+    link_cost_array: []
+  Node_Object: {fileID: 0}
+  Link_Object: {fileID: 0}
+  Agent_Object: {fileID: 0}
 --- !u!4 &972547432
 Transform:
   m_ObjectHideFlags: 0
@@ -402,5 +363,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
