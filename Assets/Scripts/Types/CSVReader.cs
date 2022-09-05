@@ -24,7 +24,7 @@ namespace TrafficSim
         public void CreateNodeCSV(Network network, string NodeFileName)
         {
             var lines = File.ReadAllLines(Application.dataPath + "/Data" + "/" + NodeFileName + ".csv");
-            int num = 0;
+            int num = 1;
             string[] names = new string[25];
             Vector3 offset = Vector3.zero;
             //Vector3 offset = new Vector3();
@@ -38,7 +38,7 @@ namespace TrafficSim
                 }
                 if (line != lines[0])
                 {
-                    
+
                     Node node = new Node();
                     for (int i = 0; i < values.Length; i++)
                     {
@@ -58,7 +58,7 @@ namespace TrafficSim
                         if (node.names[i] == "node_id")
                         {
                             node.external_node_id = Convert.ToInt32(node.data[i]);
-                            network.internal_node_seq_no_dict.Add(num, node.external_node_id);
+                            network.internal_node_seq_no_dict.Add(node.external_node_id,num - 1);
                         }
                         if (node.names[i] == "x_coord")
                         {
@@ -79,19 +79,19 @@ namespace TrafficSim
                         node.xcoord += offset.x;
                         node.ycoord += offset.y;
                     }
-
                     // set external node position to then have links to connect to
                     network.external_node_pos.Add(num, new Vector3(node.xcoord - offset.x, 0, node.ycoord - offset.y));
 
                     //Debug.Log(nodeList.Count);
-                    node.node_seq_no = num;
+                    node.node_seq_no = num - 1;
 
                     network.node_list.Add(node);
+                    //Debug.Log(network.node_list.Count);
                     num++;
+                    network.g_number_of_nodes = num;
                 }
-
-
             }
+            Debug.Log("number of nodes: " + network.node_list.Count);
         }
         /// <summary>
         /// Creates A Link using CSV Parser.
@@ -99,7 +99,7 @@ namespace TrafficSim
         public void CreateLinkCSV(Network network, string LinkFileName)
         {
             var lines = File.ReadAllLines(Application.dataPath + "/Data" + "/" + LinkFileName + ".csv");
-            int num = 0;
+            int num = 1;
             string[] names = new string[25];
             foreach (var line in lines)
             {
@@ -131,7 +131,7 @@ namespace TrafficSim
                         {
                             link.external_from_node = int.Parse(Convert.ToString(link.data[i]));
 
-                            link.from_node_seq_no = network.internal_node_seq_no_dict.FirstOrDefault(x => x.Value == link.external_from_node).Key;
+                            link.from_node_seq_no = network.internal_node_seq_no_dict[link.external_from_node];
                             Vector3 pos = Vector3.zero;
                             bool hasValue = network.external_node_pos.TryGetValue(link.from_node_seq_no, out pos);
                             if (hasValue)
@@ -149,7 +149,7 @@ namespace TrafficSim
                         {
                             link.external_to_node = int.Parse(Convert.ToString(link.data[i]));
 
-                            link.to_node_seq_no = network.internal_node_seq_no_dict.FirstOrDefault(x => x.Value == link.external_to_node).Key;
+                            link.to_node_seq_no = network.internal_node_seq_no_dict[link.external_to_node];
 
                             // declare pos
                             Vector3 pos = Vector3.zero;
@@ -193,22 +193,29 @@ namespace TrafficSim
                         }
                     }
                     //set info not related to csv file
-                    link.link_seq_no = num;
-
+                    link.link_seq_no = num - 1;
+                    //Debug.Log(link.from_node_seq_no);
+                    network.node_list[link.from_node_seq_no].outgoing_link_list.Add(link);
+                    network.node_list[link.to_node_seq_no].incoming_link_list.Add(link);
+                    //Debug.Log(network.node_list[link.to_node_seq_no ].incoming_link_list);
+                    int key=link.from_node_seq_no*10000+link.to_node_seq_no;
+                    network.node_seq_to_link_seq.Add(key,link.link_seq_no);
                     // assign link's manager to manager
                     link.network = network;
                     //Debug.Log(offset);
                     network.link_list.Add(link);
+                    network.g_number_of_links = num;
                     num++;
+                    link.init();
+
                 }
-
-
             }
+            Debug.Log("number of links: " + network.link_list.Count);
         }
         public void CreateAgentCSV(Network network, string AgentFileName)
         {
             var lines = File.ReadAllLines(Application.dataPath + "/Data" + "/" + AgentFileName + ".csv");
-            int num = 0;
+            int num = 1;
             string[] names = new string[25];
             foreach (var line in lines)
             {
@@ -245,11 +252,11 @@ namespace TrafficSim
                         }
                         if (agent.names[i] == "d_node_id")
                         {
-                            agent.o_node_id = Convert.ToInt32(agent.data[i]);
+                            agent.d_node_id = Convert.ToInt32(agent.data[i]);
                         }
-                        if (agent.names[i] == "d_node_id")
+                        if (agent.names[i] == "departure_time_in_min")
                         {
-                            agent.departure_time_in_min = Convert.ToDouble(agent.data[i]);
+                            agent.departure_time_in_min = float.Parse(Convert.ToString(agent.data[i]));
                         }
                         if (agent.names[i] == "PCE")
                         {
@@ -264,22 +271,51 @@ namespace TrafficSim
                             var vals2 = Convert.ToString(agent.data[i]).Split(';');
                             for (int k = 0; k < vals2.Length; k++)
                             {
-                                //agent.path_node_seq.Add(Convert.ToInt32(vals2[k]));
+                                agent.path_node_seq.Add(Convert.ToInt32(vals2[k]) );
                             }
                         }
                     }
+                    agent.departure_time_in_simu_interval = Convert.ToInt32(agent.departure_time_in_min * 60 / Network.NUMBER_OF_SECONDS_PER_SIMU_INTERVAL + 0.5);
                     //set info not related to csv file
-                    agent.agent_seq_no = num;
+                    agent.agent_seq_no = num -1;
                     agent.agent_id = num;
+                    network.g_number_of_agents = num;
                     // assign link's manager to manager
                     agent.network = network;
                     //Debug.Log(offset);
                     network.agent_list.Add(agent);
+                    if (agent.departure_time_in_min < network.g_simulation_start_time_in_min)
+                    {
+                        network.g_simulation_start_time_in_min = agent.departure_time_in_min;
+                    }
+                    if (agent.departure_time_in_min > network.g_simulation_end_time_in_min)
+                    {
+                        network.g_simulation_end_time_in_min = agent.departure_time_in_min;
+                    }
+
+                    if (network.agent_td_list_dict.ContainsKey(agent.departure_time_in_simu_interval))
+                    {
+                        //Debug.Log(agent.departure_time_in_simu_interval);
+                    }
+                    else
+                    {
+                        network.agent_td_list_dict[agent.departure_time_in_simu_interval] = new List<int>();
+                    }
+                    //Debug.Log(agent.departure_time_in_simu_interval);
+                    network.agent_td_list_dict[agent.departure_time_in_simu_interval].Add(agent.agent_seq_no);
                     num++;
+
+
                 }
-                network.agent_list.Sort((a, b) => a.departure_time_in_min.CompareTo(b.departure_time_in_min));
+                
+
             }
-            Debug.Log("number of agents" + network.agent_list.Count);
+            List<Agent> SortedList = network.agent_list.OrderBy(o=>o.departure_time_in_min).ToList();
+            for(int i= 0; i < network.g_number_of_agents; i++)
+                network.agent_list[i].agent_seq_no = i;
+            network.g_start_simu_interval_no = Convert.ToInt32(network.g_simulation_start_time_in_min * 60 / Network.NUMBER_OF_SECONDS_PER_SIMU_INTERVAL);
+            network.g_end_simu_interval_no = network.g_start_simu_interval_no + network.LENGTH_OF_SIMULATION_TIME_HORIZON_IN_INTERVAL;
+            Debug.Log("number of agents: " + network.agent_list.Count);
         }
     }
 }

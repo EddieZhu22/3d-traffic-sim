@@ -328,7 +328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Node_File_Name: node
   Link_File_Name: link
-  Agent_File_Name: agent
+  Agent_File_Name: input_agent
   network:
     LENGTH_OF_SIMULATION_TIME_HORIZON_IN_INTERVAL: 900
     NUMBER_OF_SIMU_INTERVALS_PER_MIN: 10
@@ -341,6 +341,7 @@ MonoBehaviour:
     g_number_of_agents: 0
     g_cumulative_arrival_count: 0
     g_cumulative_departure_count: 0
+    node_seq_to_link_seq: 
     node_predecessor: 
     node_label_cost: []
     link_predecessor: 
