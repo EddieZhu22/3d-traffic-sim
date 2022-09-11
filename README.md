@@ -17,3 +17,6 @@ Currently Work in progress:
 # How To Build (Not Implemented)
 Building will be in a single executable file. In the source code there will be a folder called "builds." Click that and open the executable file. It should open the program and be able to run.
  
+# References
+
+Sebastian Lague Path-Creator: https://github.com/SebLague/Path-Creator
