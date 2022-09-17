@@ -57,30 +57,30 @@ namespace TrafficSim
                     {
                         if (node.names[i] == "node_id")
                         {
-                            node.external_node_id = Convert.ToInt32(node.data[i]);
-                            network.internal_node_seq_no_dict.Add(node.external_node_id,num - 1);
+                            node.properties.external_node_id = Convert.ToInt32(node.data[i]);
+                            network.internal_node_seq_no_dict.Add(node.properties.external_node_id,num - 1);
                         }
                         if (node.names[i] == "x_coord")
                         {
                             //nodeObj.transform.position = new Vector3(float.Parse(Convert.ToString(node.data[i])) * multiplier + offset.x, 0, 0);
-                            node.xcoord = float.Parse(Convert.ToString(node.data[i]));
+                            node.properties.xcoord = float.Parse(Convert.ToString(node.data[i]));
                         }
                         if (node.names[i] == "y_coord")
                         {
                             //nodeObj.transform.position = new Vector3(nodeObj.transform.position.x, 0, float.Parse(Convert.ToString(node.data[i])) * multiplier + offset.z);
-                            node.ycoord = float.Parse(Convert.ToString(node.data[i]));
+                            node.properties.ycoord = float.Parse(Convert.ToString(node.data[i]));
                         }
 
                     }
                     //set origin position to zero.
                     if (line == lines[1])
                     {
-                        offset = new Vector3(node.xcoord, 0, node.ycoord);
+                        offset = new Vector3(node.properties.xcoord, 0, node.properties.ycoord);
                     }
                     // set external node position to then have links to connect to
-                    network.external_node_pos.Add(num - 1, new Vector3(node.xcoord - offset.x, 0, (node.ycoord - offset.z)));
+                    network.external_node_pos.Add(num - 1, new Vector3(node.properties.xcoord - offset.x, 0, (node.properties.ycoord - offset.z)));
                     //Debug.Log(nodeList.Count);
-                    node.node_seq_no = num - 1;
+                    node.properties.node_seq_no = num - 1;
 
                     network.node_list.Add(node);
                     //Debug.Log(network.node_list.Count);
@@ -126,11 +126,11 @@ namespace TrafficSim
                     {
                         if (link.names[i] == "from_node_id")
                         {
-                            link.external_from_node = int.Parse(Convert.ToString(link.data[i]));
+                            link.properties.external_from_node = int.Parse(Convert.ToString(link.data[i]));
 
-                            link.from_node_seq_no = network.internal_node_seq_no_dict[link.external_from_node];
+                            link.properties.from_node_seq_no = network.internal_node_seq_no_dict[link.properties.external_from_node];
                             Vector3 pos = Vector3.zero;
-                            bool hasValue = network.external_node_pos.TryGetValue(link.from_node_seq_no, out pos);
+                            bool hasValue = network.external_node_pos.TryGetValue(link.properties.from_node_seq_no, out pos);
                             if (hasValue)
                             {
                                 //LinkObj.GetComponent<LineRenderer>().SetPosition(0, pos);
@@ -144,13 +144,13 @@ namespace TrafficSim
                         }
                         if (link.names[i] == "to_node_id")
                         {
-                            link.external_to_node = int.Parse(Convert.ToString(link.data[i]));
+                            link.properties.external_to_node = int.Parse(Convert.ToString(link.data[i]));
 
-                            link.to_node_seq_no = network.internal_node_seq_no_dict[link.external_to_node];
+                            link.properties.to_node_seq_no = network.internal_node_seq_no_dict[link.properties.external_to_node];
 
                             // declare pos
                             Vector3 pos = Vector3.zero;
-                            bool hasValue = network.external_node_pos.TryGetValue(link.to_node_seq_no, out pos);
+                            bool hasValue = network.external_node_pos.TryGetValue(link.properties.to_node_seq_no, out pos);
                             if (hasValue)
                             {
                                 //LinkObj.GetComponent<LineRenderer>().SetPosition(1, pos);
@@ -162,41 +162,41 @@ namespace TrafficSim
                         }
                         if (link.names[i] == "length")
                         {
-                            link.length = float.Parse(Convert.ToString(link.data[i]));
+                            link.properties.length = float.Parse(Convert.ToString(link.data[i]));
                         }
                         if (link.names[i] == "lanes")
                         {
-                            link.lanes = float.Parse(Convert.ToString(link.data[i]));
+                            link.properties.lanes = float.Parse(Convert.ToString(link.data[i]));
                         }
                         if (link.names[i] == "free_speed")
                         {
-                            link.free_speed = float.Parse(Convert.ToString(link.data[i]));
+                            link.properties.free_speed = float.Parse(Convert.ToString(link.data[i]));
                         }
                         if (link.names[i] == "capacity")
                         {
-                            link.link_capacity = float.Parse(Convert.ToString(link.data[i])) * Convert.ToInt32(link.lanes);
+                            link.properties.link_capacity = float.Parse(Convert.ToString(link.data[i])) * Convert.ToInt32(link.properties.lanes);
                         }
                         if (link.names[i] == "link_type")
                         {
-                            link.type = int.Parse(Convert.ToString(link.data[i]));
+                            link.properties.type = int.Parse(Convert.ToString(link.data[i]));
                         }
                         if (link.names[i] == "BPR_alpha1")
                         {
-                            link.VDF_alpha = float.Parse(Convert.ToString(link.data[i]));
+                            link.properties.VDF_alpha = float.Parse(Convert.ToString(link.data[i]));
                         }
                         if (link.names[i] == "BPR_beta1")
                         {
-                            link.VDF_alpha = float.Parse(Convert.ToString(link.data[i]));
+                            link.properties.VDF_alpha = float.Parse(Convert.ToString(link.data[i]));
                         }
                     }
                     //set info not related to csv file
-                    link.link_seq_no = num - 1;
+                    link.properties.link_seq_no = num - 1;
                     //Debug.Log(link.from_node_seq_no);
-                    network.node_list[link.from_node_seq_no].outgoing_link_list.Add(link);
-                    network.node_list[link.to_node_seq_no].incoming_link_list.Add(link);
+                    network.node_list[link.properties.from_node_seq_no].outgoing_link_list.Add(link);
+                    network.node_list[link.properties.to_node_seq_no].incoming_link_list.Add(link);
                     //Debug.Log(network.node_list[link.to_node_seq_no ].incoming_link_list);
-                    int key=link.from_node_seq_no*10000+link.to_node_seq_no;
-                    network.node_seq_to_link_seq.Add(key,link.link_seq_no);
+                    int key=link.properties.from_node_seq_no *10000+link.properties.to_node_seq_no;
+                    network.node_seq_to_link_seq.Add(key,link.properties.link_seq_no);
                     // assign link's manager to manager
                     link.network = network;
                     //Debug.Log(offset);

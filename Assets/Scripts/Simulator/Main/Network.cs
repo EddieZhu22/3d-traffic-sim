@@ -6,7 +6,7 @@ using System;
 
 namespace TrafficSim
 {
-    [System.Serializable]
+    [Serializable]
     public class Network
     {
         public static int MAX_LABEL_COST_IN_SHORTEST_PATH = 10000;
@@ -93,17 +93,17 @@ namespace TrafficSim
 
             for (int i = 0; i < link_list.Count; i++)
             {
-                link_cost_array[i] = link_list[i].cost;
+                link_cost_array[i] = link_list[i].properties.cost;
             }
             for (int i = 0; i < link_list.Count; i++)
             {
-                node_OutgoingLinkSize[link_list[i].from_node_seq_no] += 1;
+                node_OutgoingLinkSize[link_list[i].properties.from_node_seq_no] += 1;
             }
             for (int i = 0; i < node_list.Count; i++)
                 node_OutgoingLinkSize[i] = 0;
             for (int i = 0; i < link_list.Count; i++)
             {
-                node_OutgoingLinkSize[link_list[i].from_node_seq_no] += 1;
+                node_OutgoingLinkSize[link_list[i].properties.from_node_seq_no] += 1;
             }
         }
         #endregion
@@ -150,13 +150,13 @@ namespace TrafficSim
                     status[from_node] = 0;
                     for (int k = 0; k < node_list[from_node].outgoing_link_list.Count; k++) //correct
                     {
-                        int to_node = node_list[from_node].outgoing_link_list[k].to_node_seq_no; //correct
-                        float new_to_node_cost = node_label_cost[from_node] + link_cost_array[node_list[from_node].outgoing_link_list[k].link_seq_no]; //.correctg
+                        int to_node = node_list[from_node].outgoing_link_list[k].properties.to_node_seq_no; //correct
+                        float new_to_node_cost = node_label_cost[from_node] + link_cost_array[node_list[from_node].outgoing_link_list[k].properties.link_seq_no]; //.correctg
                         if (new_to_node_cost < node_label_cost[to_node]) //correct
                         {
                             node_label_cost[to_node] = new_to_node_cost;//correct
                             node_predecessor[to_node] = from_node; 
-                            link_predecessor[to_node] = node_list[from_node].outgoing_link_list[k].link_seq_no;
+                            link_predecessor[to_node] = node_list[from_node].outgoing_link_list[k].properties.link_seq_no;
                             if (status[to_node] == 0)//correct
                             {
                                 SEList.Add(to_node);//correct
@@ -177,14 +177,14 @@ namespace TrafficSim
                     status[from_node] = 2;
                     for (int i = 0; i < node_list[from_node].outgoing_link_list.Count; i++)
                     {
-                        int to_node = node_list[from_node].outgoing_link_list[i].to_node_seq_no;
-                        float new_to_node_cost = node_label_cost[from_node] + link_cost_array[node_list[from_node].outgoing_link_list[i].link_seq_no];
+                        int to_node = node_list[from_node].outgoing_link_list[i].properties.to_node_seq_no;
+                        float new_to_node_cost = node_label_cost[from_node] + link_cost_array[node_list[from_node].outgoing_link_list[i].properties.link_seq_no];
 
                         if (new_to_node_cost < node_label_cost[to_node])
                         {
                             node_label_cost[to_node] = new_to_node_cost;
                             node_predecessor[to_node] = from_node;
-                            link_predecessor[to_node] = node_list[from_node].outgoing_link_list[i].link_seq_no;
+                            link_predecessor[to_node] = node_list[from_node].outgoing_link_list[i].properties.link_seq_no;
                             if (status[to_node] != 1)
                                 if (status[to_node] == 2)
                                     SEList.Prepend(to_node);
@@ -207,15 +207,15 @@ namespace TrafficSim
                     int from_node = Convert.ToInt32(SEList[1]);
                     for (int k = 0; k < node_list[from_node].outgoing_link_list.Count; k++)
                     {
-                        int to_node = node_list[from_node].outgoing_link_list[k].to_node_seq_no;
-                        float new_to_node_cost = label_cost + link_cost_array[node_list[from_node].outgoing_link_list[k].link_seq_no];
+                        int to_node = node_list[from_node].outgoing_link_list[k].properties.to_node_seq_no;
+                        float new_to_node_cost = label_cost + link_cost_array[node_list[from_node].outgoing_link_list[k].properties.link_seq_no];
                         if (new_to_node_cost < node_label_cost[to_node])
                         {
                             node_label_cost[to_node] = new_to_node_cost;
 
                             node_predecessor[to_node] = from_node;
 
-                            link_predecessor[to_node] = node_list[from_node].outgoing_link_list[k].link_seq_no;
+                            link_predecessor[to_node] = node_list[from_node].outgoing_link_list[k].properties.link_seq_no;
 
                             SEList.Add(node_label_cost[to_node]);
                             SEList.Add(to_node);
@@ -345,8 +345,8 @@ namespace TrafficSim
                     Link link = link_list[k];
                     if (relative_i >= 1)
                     {
-                        link_list[link.link_seq_no].td_link_cumulative_departure[relative_i] = link_list[link.link_seq_no].td_link_cumulative_departure[relative_i - 1];
-                        link_list[link.link_seq_no].td_link_cumulative_arrival[relative_i] = link_list[link.link_seq_no].td_link_cumulative_arrival[relative_i - 1];
+                        link_list[link.properties.link_seq_no].td_link_cumulative_departure[relative_i] = link_list[link.properties.link_seq_no].td_link_cumulative_departure[relative_i - 1];
+                        link_list[link.properties.link_seq_no].td_link_cumulative_arrival[relative_i] = link_list[link.properties.link_seq_no].td_link_cumulative_arrival[relative_i - 1];
                     }
 
                 }
@@ -377,7 +377,7 @@ namespace TrafficSim
 
                         agent_list[agent_seq].veh_link_departure_time_in_simu_interval[agent_list[agent_seq].current_link_seq_no_in_path] =
                                                 agent_list[agent_seq].veh_link_arrival_time_in_simu_interval[agent_list[agent_seq].current_link_seq_no_in_path]
-                                                + link.general_travel_time_in_simu_interval;
+                                                + link.properties.general_travel_time_in_simu_interval;
                     }
                 }
                 for (int j = 0; j < node_list.Count; j++)
@@ -387,7 +387,7 @@ namespace TrafficSim
                     for (int k = 0; k < incoming_link_list_size; k++)
                     {
                         int incoming_link_index = (k + i) % (incoming_link_list_size);
-                        int link_seq_no = node.incoming_link_list[incoming_link_index].link_seq_no;
+                        int link_seq_no = node.incoming_link_list[incoming_link_index].properties.link_seq_no;
                         while (link_list[link_seq_no].td_link_out_flow_capacity[relative_i] >= 1 && link_list[link_seq_no].exit_queue.Count >= 1)
                         {
                             int agent_no = node.incoming_link_list[incoming_link_index].exit_queue[0];
@@ -413,7 +413,7 @@ namespace TrafficSim
                                 agent_list[agent_no].veh_link_arrival_time_in_simu_interval[agent_list[agent_no].current_link_seq_no_in_path + 1] = i;
                                 float actual_travel_time = i - agent_list[agent_no].veh_link_arrival_time_in_simu_interval[agent_list[agent_no].current_link_seq_no_in_path];
 
-                                float waiting_time = actual_travel_time - link_list[link_seq_no].general_travel_time_in_min;
+                                float waiting_time = actual_travel_time - link_list[link_seq_no].properties.general_travel_time_in_min;
                                 float temp_relative_time = g_A2R_simu_interval(agent_list[agent_no].veh_link_arrival_time_in_simu_interval[agent_list[agent_no].current_link_seq_no_in_path]);
                                 int time_in_min = Convert.ToInt32(temp_relative_time / NUMBER_OF_SIMU_INTERVALS_PER_MIN);
 

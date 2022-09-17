@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Object : MonoBehaviour // Objects are Data Structures like Links, Nodes, and Agents
 {
-    
+
 }
 
 
