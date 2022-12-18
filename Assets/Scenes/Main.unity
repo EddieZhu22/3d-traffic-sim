@@ -920,6 +920,7 @@ MonoBehaviour:
   Node_File_Name: node
   Link_File_Name: link
   Agent_File_Name: input_agent
+  POI_File_Name: poi
   network:
     LENGTH_OF_SIMULATION_TIME_HORIZON_IN_INTERVAL: 900
     NUMBER_OF_SIMU_INTERVALS_PER_MIN: 10
@@ -945,9 +946,12 @@ MonoBehaviour:
   Link_Object: {fileID: 5075889627590713008, guid: 85f9768ad2ac2974085ef347f85008d5,
     type: 3}
   Agent_Object: {fileID: 0}
+  BuildingObject: {fileID: 3185487987483111307, guid: 78f52833dcdd4aa418e16a0abf7f01e9,
+    type: 3}
   Link_Obj_List: []
   Link_Comp_List: []
   Node_Obj_List: []
+  POI_Obj_List: []
 --- !u!4 &972547432
 Transform:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ namespace TrafficSim
 {
     public class LinkObject : Object //3D object representing 3D visualization
     {
-        public Link link;
+        [HideInInspector] public Link link;
 
         // public property shows in Inspector
         public Link.LinkProperties properties;

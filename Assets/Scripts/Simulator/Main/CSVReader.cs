@@ -4,7 +4,6 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Linq;
-
 /// <summary>
 /// WIP
 /// CLEAN UP CODE!
@@ -25,7 +24,7 @@ namespace TrafficSim
         {
             var lines = File.ReadAllLines(Application.dataPath + "/Data" + "/" + NodeFileName + ".csv");
             int num = 1;
-            string[] names = new string[25];
+            string[] names = new string[lines.GetLength(0)];
             Vector3 offset = Vector3.zero;
             //Vector3 offset = new Vector3();
             foreach (var line in lines)
@@ -58,7 +57,7 @@ namespace TrafficSim
                         if (node.names[i] == "node_id")
                         {
                             node.properties.external_node_id = Convert.ToInt32(node.data[i]);
-                            network.internal_node_seq_no_dict.Add(node.properties.external_node_id,num - 1);
+                            network.internal_node_seq_no_dict.Add(node.properties.external_node_id, num - 1);
                         }
                         if (node.names[i] == "x_coord")
                         {
@@ -97,7 +96,7 @@ namespace TrafficSim
         {
             var lines = File.ReadAllLines(Application.dataPath + "/Data" + "/" + LinkFileName + ".csv");
             int num = 1;
-            string[] names = new string[25];
+            string[] names = new string[lines.GetLength(0)];
             foreach (var line in lines)
             {
                 var values = line.Split(',');
@@ -166,15 +165,18 @@ namespace TrafficSim
                         }
                         if (link.names[i] == "lanes")
                         {
-                            link.properties.lanes = float.Parse(Convert.ToString(link.data[i]));
+                            if (Convert.ToString(link.data[i]) != "")
+                                link.properties.lanes = float.Parse(Convert.ToString(link.data[i]));
                         }
                         if (link.names[i] == "free_speed")
                         {
-                            link.properties.free_speed = float.Parse(Convert.ToString(link.data[i]));
+                            if (Convert.ToString(link.data[i]) != "")
+                                link.properties.free_speed = float.Parse(Convert.ToString(link.data[i]));
                         }
                         if (link.names[i] == "capacity")
                         {
-                            link.properties.link_capacity = float.Parse(Convert.ToString(link.data[i])) * Convert.ToInt32(link.properties.lanes);
+                            if (Convert.ToString(link.data[i]) != "")
+                                link.properties.link_capacity = float.Parse(Convert.ToString(link.data[i])) * Convert.ToInt32(link.properties.lanes);
                         }
                         if (link.names[i] == "link_type")
                         {
@@ -195,8 +197,8 @@ namespace TrafficSim
                     network.node_list[link.properties.from_node_seq_no].outgoing_link_list.Add(link);
                     network.node_list[link.properties.to_node_seq_no].incoming_link_list.Add(link);
                     //Debug.Log(network.node_list[link.to_node_seq_no ].incoming_link_list);
-                    int key=link.properties.from_node_seq_no *10000+link.properties.to_node_seq_no;
-                    network.node_seq_to_link_seq.Add(key,link.properties.link_seq_no);
+                    int key = link.properties.from_node_seq_no * 10000 + link.properties.to_node_seq_no;
+                    network.node_seq_to_link_seq.Add(key, link.properties.link_seq_no);
                     // assign link's manager to manager
                     link.network = network;
                     //Debug.Log(offset);
@@ -209,11 +211,13 @@ namespace TrafficSim
             }
             Debug.Log("number of links: " + network.link_list.Count);
         }
+        
         public void CreateAgentCSV(Network network, string AgentFileName)
         {
+
             var lines = File.ReadAllLines(Application.dataPath + "/Data" + "/" + AgentFileName + ".csv");
             int num = 1;
-            string[] names = new string[25];
+            string[] names = new string[lines.GetLength(0)];
             foreach (var line in lines)
             {
                 var values = line.Split(',');
@@ -228,10 +232,6 @@ namespace TrafficSim
                     for (int i = 0; i < values.Length; i++)
                     {
                         agent.data = values;
-                        //node.vals = new string[num + 1][];
-                        //node.vals[num] = new string[values.Length];
-                        //node.vals[num][i] = values[i];
-                        //Debug.Log(node.vals[num][i]);
                     }
 
                     // set any relevant information.
@@ -268,13 +268,13 @@ namespace TrafficSim
                             var vals2 = Convert.ToString(agent.data[i]).Split(';');
                             for (int k = 0; k < vals2.Length; k++)
                             {
-                                agent.path_node_seq.Add(Convert.ToInt32(vals2[k]) );
+                                agent.path_node_seq.Add(Convert.ToInt32(vals2[k]));
                             }
                         }
                     }
                     agent.departure_time_in_simu_interval = Convert.ToInt32(agent.departure_time_in_min * 60 / Network.NUMBER_OF_SECONDS_PER_SIMU_INTERVAL + 0.5);
                     //set info not related to csv file
-                    agent.agent_seq_no = num -1;
+                    agent.agent_seq_no = num - 1;
                     agent.agent_id = num;
                     network.g_number_of_agents = num;
                     // assign link's manager to manager
@@ -304,15 +304,83 @@ namespace TrafficSim
 
 
                 }
-                
+
 
             }
-            List<Agent> SortedList = network.agent_list.OrderBy(o=>o.departure_time_in_min).ToList();
-            for(int i= 0; i < network.g_number_of_agents; i++)
+            List<Agent> SortedList = network.agent_list.OrderBy(o => o.departure_time_in_min).ToList();
+            for (int i = 0; i < network.g_number_of_agents; i++)
                 network.agent_list[i].agent_seq_no = i;
             network.g_start_simu_interval_no = Convert.ToInt32(network.g_simulation_start_time_in_min * 60 / Network.NUMBER_OF_SECONDS_PER_SIMU_INTERVAL);
             network.g_end_simu_interval_no = network.g_start_simu_interval_no + network.LENGTH_OF_SIMULATION_TIME_HORIZON_IN_INTERVAL;
             Debug.Log("number of agents: " + network.agent_list.Count);
+        }
+        public void CreateBuildingCSV(Network network, string BuildingFileName)
+        {
+            var lines = File.ReadAllLines(Application.dataPath + "/Data" + "/" + BuildingFileName + ".csv");
+            string[] names = new string[lines.GetLength(0)];
+            foreach (var line in lines)
+            {
+                var values = line.Split(',');
+
+                if (line == lines[0])
+                {
+                    names = values;
+                }
+                if (line != lines[0])
+                {
+                    Building building = new Building();
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        building.data = values;
+                    }
+
+                    building.names = names;
+
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        if (building.names[i] == "poi_id")
+                        {
+                            Debug.Log(Convert.ToString(building.data[i]));
+                            building.properties.poi_id = int.Parse(Convert.ToString(building.data[i]));
+                        }
+                        if (building.names[i] == "building")
+                        {
+                            building.properties.buildingType = Convert.ToString(building.data[i]);
+                        }
+                        if (building.names[i] == "geometry")
+                        {
+                            building.geometry = Convert.ToString(building.data[i]);
+                        }
+                    }
+                    building.properties.Points = building.ParseGeometry(building.geometry);
+                    network.poi_list.Add(building);
+                }
+            }
+            foreach (var line in lines)
+            {
+                var values = line.Split('"');
+
+                if (line != lines[0])
+                {
+                    Building building = new Building();
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        building.data = values;
+                    }
+
+                    building.names = names;
+
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        if (building.names[i] == "geometry")
+                        {
+                            building.geometry = Convert.ToString(building.data[i]);
+                        }
+                    }
+                    building.properties.Points = building.ParseGeometry(building.geometry);
+                    network.poi_list.Add(building);
+                }
+            }
         }
     }
 }

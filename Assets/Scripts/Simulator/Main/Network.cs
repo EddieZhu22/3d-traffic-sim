@@ -46,6 +46,7 @@ namespace TrafficSim
         public int g_cumulative_arrival_count = 0;
         public int g_cumulative_departure_count = 0;
 
+        public List<Building> poi_list = new List<Building>();
         public List<Node> node_list = new List<Node>();
         public List<Link> link_list = new List<Link>();
         public List<Agent> agent_list = new List<Agent>();

@@ -11,7 +11,7 @@ namespace TrafficSim
     {
         [Header("File Names")]
         [SerializeField] private string Node_File_Name;
-        [SerializeField] private string Link_File_Name, Agent_File_Name;
+        [SerializeField] private string Link_File_Name, Agent_File_Name, POI_File_Name;
 
         [Header("Attributes")]
         public Network network;
@@ -21,23 +21,25 @@ namespace TrafficSim
 
         [Header("Objects")]
         [SerializeField] private GameObject Node_Object;
-        [SerializeField] private GameObject Link_Object, Agent_Object;
+        [SerializeField] private GameObject Link_Object, Agent_Object, BuildingObject;
 
         [Header("Lists, Arrays, Dictionaries")]
         public List<GameObject> Link_Obj_List;
         public List<LinkObject> Link_Comp_List;
         public List<GameObject> Node_Obj_List;
+        public List<GameObject> POI_Obj_List;
         private int[,] from_to_node_pairs;
-        void Start()
+        private void Start()
         {
             ReadCSV();
         }
-        private void ReadCSV() // Reads the CSV file
+        public void ReadCSV() // Reads the CSV file
         {
             reader = new CSVReader();
             reader.CreateNodeCSV(network, Node_File_Name);
             reader.CreateLinkCSV(network, Link_File_Name);
             reader.CreateAgentCSV(network, Agent_File_Name);
+            reader.CreateBuildingCSV(network, POI_File_Name);
         }
 
         public void RunSimulation() //Run the Simulation Process
@@ -60,9 +62,10 @@ namespace TrafficSim
             for (int i = 0; i < network.node_list.Count; i++)
             {
                 GameObject node = Instantiate(Node_Object);
-                SetNodeAttributes(node,i);
+                SetNodeAttributes(node, i);
                 NodeObject nodeComponent = node.GetComponent<NodeObject>();
-                nodeComponent.node = network.node_list[i];
+
+                nodeComponent.properties = network.node_list[i].properties;
                 Node_Obj_List.Add(node);
             }
 
@@ -75,11 +78,20 @@ namespace TrafficSim
                 GameObject link = Instantiate(Link_Object);
                 LinkObject linkComponent = link.GetComponent<LinkObject>();
                 SetLinkAttributes(linkComponent, link, i, false);
-                
+                linkComponent.properties = network.link_list[i].properties;
                 Link_Obj_List.Add(link);
                 Link_Comp_List.Add(linkComponent);
             }
 
+            // Loop Through POI's and instantiate the GameObject
+            for (int i = 0; i < network.poi_list.Count; i++)
+            {
+                GameObject POI = Instantiate(BuildingObject);
+                BuildingObject buildingObject = POI.GetComponent<BuildingObject>();
+                buildingObject.properties = network.poi_list[i].properties;
+                //BuildingObject buildingComponent = POI.GetComponent<BuildingObject>();
+                POI_Obj_List.Add(POI);
+            }
         }
 
         //Calculate Offset
@@ -94,7 +106,6 @@ namespace TrafficSim
         {
             node.transform.position = network.external_node_pos[i] / PosMultiplier;
         }
-
         public void SetLinkAttributes(LinkObject linkComponent, GameObject link, int i, bool external)
         {
             int from_node_seq_no = network.link_list[i].properties.from_node_seq_no;
@@ -110,7 +121,7 @@ namespace TrafficSim
             linkComponent.SetPosition();
 
             //check if method is being called from within the simulation editor as part of instantiation.
-            if(external == false)
+            if (external == false)
             {
                 //Find the Offset Based On Whether the same Link has From To Pair is the same (ex. [from: 25, to: 15], [to: 15, from: 25])
                 if (from_to_node_pairs[to_node_seq_no, from_node_seq_no] == from_to_node_pairs[from_node_seq_no, to_node_seq_no])
