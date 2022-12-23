@@ -1,0 +1,59 @@
+{
+    "Connections": [
+        {
+            "Name": "localhost",
+            "Host": "localhost",
+            "AmqpPort": 5672,
+            "WebPort": 15672,
+            "VirtualHost": "/",
+            "Username": "guest",
+            "Password": "guest",
+            "ReconnectInterval": 5,
+            "RequestedHeartBeat": 30
+        },
+        {
+            "Name": "AMQP Test",
+            "Host": "shrimp-01.rmq.cloudamqp.com ",
+            "AmqpPort": 5672,
+            "WebPort": 15672,
+            "VirtualHost": "ribnaxjb",
+            "Username": "ribnaxjb",
+            "Password": "ye2N75td0uqxurJI5CQOZwEOJBbq_hnn",
+            "ReconnectInterval": 5,
+            "RequestedHeartBeat": 30
+        },
+        {
+            "Name": "Test",
+            "Host": "shrimp-01.rmq.cloudamqp.com ",
+            "AmqpPort": 5672,
+            "WebPort": 15672,
+            "VirtualHost": "ribnaxjb",
+            "Username": "ribnaxjb",
+            "Password": "ye2N75td0uqxurJI5CQOZwEOJBbq_hnn",
+            "ReconnectInterval": 5,
+            "RequestedHeartBeat": 30
+        },
+        {
+            "Name": "Test1",
+            "Host": "shrimp.rmq.cloudamqp.com ",
+            "AmqpPort": 5672,
+            "WebPort": 15672,
+            "VirtualHost": "ribnaxjb",
+            "Username": "ribnaxjb",
+            "Password": "ye2N75td0uqxurJI5CQOZwEOJBbq_hnn",
+            "ReconnectInterval": 5,
+            "RequestedHeartBeat": 30
+        },
+        {
+            "Name": "Test2",
+            "Host": "shrimp-01.rmq.cloudamqp.com",
+            "AmqpPort": 5672,
+            "WebPort": 15672,
+            "VirtualHost": "ribnaxjb",
+            "Username": "ribnaxjb",
+            "Password": "ye2N75td0uqxurJI5CQOZwEOJBbq_hnn",
+            "ReconnectInterval": 5,
+            "RequestedHeartBeat": 30
+        }
+    ]
+}

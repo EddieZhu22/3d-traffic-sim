@@ -46,8 +46,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b96fc77adb2504d89b8989e0f6c334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  properties:
+    link_seq_no: 0
+    from_node_seq_no: 0
+    to_node_seq_no: 0
+    external_from_node: 0
+    external_to_node: 0
+    type: 0
+    flow_volume: 0
+    free_flow_travel_time_in_min: 0
+    cumulative_arrival_count: 0
+    cumulative_departure_count: 0
+    cumulative_virtual_delay_count: 0
+    length: 0
+    free_speed: 0
+    VDF_alpha: 0
+    VDF_beta: 0
+    general_travel_time_in_min: 0
+    general_travel_time_in_simu_interval: 0
+    cost: 0
+    lanes: 0
+    link_capacity: 0
   fromPos: {x: 0, y: 0, z: 0}
   toPos: {x: 0, y: 0, z: 0}
+  offsetVal: {x: 0, y: 0, z: 0}
 --- !u!33 &714434272089926567
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -74,7 +96,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 69561553b86bde34da494d1ffed3ba45, type: 2}
+  - {fileID: 2100000, guid: 9ce3fbeb14586d443ba5940cac346e31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -30,7 +30,8 @@ namespace TrafficSim
             transform.localScale = new Vector3(r, 0.1f, .5f);
             Vector3 m = new Vector3((toPos.x + fromPos.x) / 2, 0, (toPos.z + fromPos.z) / 2);
             transform.position = m;
-            transform.eulerAngles = new Vector3(0, - (Mathf.Atan(y / x) * 180 / Mathf.PI), 0);
+
+            transform.eulerAngles = new Vector3(0, -(Mathf.Atan(y / x) * 180 / Mathf.PI), 0);
         }  
         public void SetProperties()
         {
