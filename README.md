@@ -4,8 +4,9 @@ A 3 Dimensional Dynamic Traffic Assignment Visualizer and Engine built upon the 
 
 # How To Access Source Code
 1) Download Unity 2019.4.3f1 from here: https://unity3d.com/get-unity/download
-2) Clone this project to your desired file location
-3) Done
+2) Download C# .NET 4.x or higher (due to use of dynamic parameter)
+3) Clone this project to your desired file location
+4) Done
 # Updates
 Currently Work in progress:
 - [x] GMNS data parser
